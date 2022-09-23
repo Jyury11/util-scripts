@@ -12,7 +12,7 @@ SEARCH_COMMAND="search"
 # -------------------------------------------
 #   variables  definitions
 # -------------------------------------------
-DIR="$( cd "$( dirname "$0" )" && pwd -P )"
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
 DIR="$(ls -la $DIR/util | awk '{print $11}' | xargs dirname)"
 SCRIPT_NAME=""
 COMMAND="$SHELL_COMMAND"
@@ -33,7 +33,7 @@ help() {
 
   printf "\033[36m%s\033[0m %s\n" "Command"
   ls $DIR/scripts | grep -o "^[^\.]*" | while read line; do
-    printf "  \033[36m%-30s\033[0m %s\n" "$line" "$(head "$DIR/scripts/$line.sh" -n 2 | tail -n 1 | awk 'BEGIN {FS = "# "}; {print $2}')"
+    printf "  \033[36m%-30s\033[0m %s\n" "$line" "$(head -n 2 "$DIR/scripts/$line.sh" | tail -n 1 | awk 'BEGIN {FS = "# "}; {print $2}')"
   done
 }
 
@@ -61,36 +61,35 @@ args() {
     invalidArguments
   fi
 
-  while [ 1 ]
-  do
+  while [ 1 ]; do
     case $1 in
-      update)
-        COMMAND="$UPDATE_COMMAND"
-        break
-        ;;
-      cat)
-        COMMAND="$CAT_COMMAND"
-        SCRIPT_NAME="$2"
-        break
-        ;;
-      serach)
-        COMMAND="$SEARCH_COMMAND"
-        break
-        ;;
-      help)
-        end
-        ;;
-      --help)
-        end
-        ;;
-      -h)
-        end
-        ;;
-      *)
-        SCRIPT_NAME="$1"
-        shift
-        break
-        ;;
+    update)
+      COMMAND="$UPDATE_COMMAND"
+      break
+      ;;
+    cat)
+      COMMAND="$CAT_COMMAND"
+      SCRIPT_NAME="$2"
+      break
+      ;;
+    serach)
+      COMMAND="$SEARCH_COMMAND"
+      break
+      ;;
+    help)
+      end
+      ;;
+    --help)
+      end
+      ;;
+    -h)
+      end
+      ;;
+    *)
+      SCRIPT_NAME="$1"
+      shift
+      break
+      ;;
     esac
   done
 }
@@ -135,7 +134,6 @@ search() {
     SCRIPT_NAME=$(ls $DIR/scripts | fzf | grep -o "^[^\.]*")
   fi
 }
-
 
 # -------------------------------------------
 #   main
